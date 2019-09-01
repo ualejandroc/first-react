@@ -29,7 +29,7 @@ const styles= {
           // position: "absolute",
           margin:0,
           padding:0,
-          border: '2px solid black'
+          border: '2px solid grey'
           
         },
   container:
