@@ -12,8 +12,16 @@ import ReactDOM from "react-dom";
 // src='https://freight.cargo.site/t/original/i/22da83e6832d7e844384b84a3d3a29a36872695bd4d59a7a309bf4b951369b1b/1400pxMarks-symbols-05.png'
 
 const styles= {
+  images: {
+    width: 40, 
+    height: 40,
+    display: "flex",
+    
+  },
   square:{
-                   
+    alignItems:'center',
+    justifyContent:'center',
+          display: "flex",       
           width: 100,
           height: 100,
           borderColor:'#000',
@@ -21,6 +29,7 @@ const styles= {
           // position: "absolute",
           margin:0,
           padding:0,
+          border: '2px solid black'
           
         },
   container:
@@ -33,7 +42,6 @@ const styles= {
           justifyContent:'flex-start',
           alignItems: 'stretch',
           alignContent:'flex-start',
-          // position: "relative"
         }
 
       };
@@ -73,18 +81,18 @@ class Square extends React.Component {
        n: this.props.n,
      
       // let handleKeyDown = this.handleKeyDown.bind(this) 
-        imgElem: 'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/fc/3034007-inline-i-applelogo.jpg',
-        imgPlay: 'https://freight.cargo.site/t/original/i/22da83e6832d7e844384b84a3d3a29a36872695bd4d59a7a309bf4b951369b1b/1400pxMarks-symbols-05.png'
-                     
+        imgElem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD9eBjHRgSnEpj2Kdi9BcO0jQuqMbXsHIqBfzOULgFVQbN8QAa',
+        imgPlay: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsh69DzGNII0obwN1_V6GgVuFa1TNK6aTKUMWeRwoHopI4_wdOlQ'
     }
       
       this.handleKeyDown = this.handleKeyDown.bind(this)
       
     }
     
-    
-    //handles touches
-    handleKeys = (move, index) => {  
+   
+
+    //handles arrow keys
+    handleKeys = (key) => {  
       const mov = this.state.elemens;  
       const plays = this.state.play; 
       const n = this.state.n
@@ -96,72 +104,61 @@ class Square extends React.Component {
               actual=i      
         
          }
-  
-        for(let i=0;i< plays.length; i++){ 
-            plays[i]=0;
-           if(index===actual+1 || index===actual-1 ||  ///anadir n-1 o n+1 
-              index===actual-n || index===actual+n )
-              {
-                plays[index]=1
-                mov[index]=0
-                } 
-              else
-               {
-                 plays[actual]=1
-                 mov[index]=0
-               }
-        
-         }      
+         
+          switch(key) {
+              case 'left':
+                if(actual>0)
+                  {
+                    plays[actual-1]=1
+                    mov[actual-1]=0
+                    mov[actual]=0
+                    plays[actual]=0
+                    } 
+                 
+                 
+                  break;
+              case 'up':
+                  // UP
+                  if(actual>n-1)
+                  {
+                    plays[actual-n]=1
+                    mov[actual-n]=0
+                    mov[actual]=0
+                    plays[actual]=0
+                    } 
+                  console.log('up')
+                  break;
+              case 'rigth':
+                if(actual<=n*n-2)
+                {
+                  plays[actual+1]=1
+                  mov[actual+1]=0
+                  mov[actual]=0
+                  plays[actual]=0
+                  } 
+                  console.log('rigth')
+                  break;
+              case 'down':
+                if(actual<=(n -1)*n-1 )
+                {
+                  plays[actual+n]=1
+                  mov[actual+n]=0
+                  mov[actual]=0
+                  plays[actual]=0
+                  } 
+                  break;
+              default:
+                  return;
+          }
      
        this.setState({play: plays})    
        this.setState({elemens: mov}) 
   
       }      
     
-    //  handleClick(i){
-    //   const squares = this.state.squares.slice();
-    //   squares[i] = 'X';
-    //   this.setState({squares: squares});
-    // }
+  
     
-  
-    initial(){
-      
-       const mov = this.state.elemens;
-      const plays = this.state.play;   
-  
-      const move = mov.map(( move,index) => {
-  
-            let imgs;
-            if (move===1&& plays[index]===0){  //(this.state.isElem) {
-                  imgs=  this.state.imgElem
-            }else if(move===1&& plays[index]===1){
-                  mov[index]=0
-                   this.setState({elemens: mov})
-                   imgs=  this.state.imgPlay
-            }  else if(move===0 && plays[index]===1){
-                   imgs=  this.state.imgPlay  
-            }     
-             else if(move===0 && plays[index]===0){
-              imgs=  ""
-            
-            }
-  
-            //return of the render of the map of elements
-            return (            
-              <Square               
-              pStyle={styles.square}
-              src={this.state.imgElem}
-              style={{width: 40, height: 40}}
-                             
-                />
-             
-            );
-    
-      }); 
-      
-    }
-                
+                 
       
    handleKeyDown(e) {
           let newDirection;
@@ -170,28 +167,25 @@ class Square extends React.Component {
           switch(e.keyCode) {
               case 37:
                   //LEFT
-                  // newDirection = { top: 0, left: -1 , dir: LEFT};
-                  console.log('left')
+                  this.handleKeys('left')   
                   break;
               case 38:
                   // UP
-                  // newDirection = { top: -1, left: 0 , dir: UP};
-                  console.log('up')
+                  this.handleKeys('up') 
                   break;
               case 39:
                   // rigth
-                  // newDirection = { top: 0, left: 1, dir: RIGHT};
+                  this.handleKeys('rigth') 
                   console.log('rigth')
                   break;
               case 40:
                   // DOWN
-                  // newDirection = { top: 1, left: 0, dir: DOWN };
+                  this.handleKeys('down') 
                   break;
               default:
                   return;
           }
   
-          // this.props.handlePlayerMovement(newDirection);
       }
   
      componentDidMount() {
@@ -227,7 +221,7 @@ class Square extends React.Component {
               key={index.toString()}             
               pStyle={styles.square}
               src={imgs}
-              style={{width: 40, height: 40}}
+              style={styles.images}
                 />
              
             );
