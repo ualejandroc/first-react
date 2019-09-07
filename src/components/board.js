@@ -219,11 +219,10 @@ export default class Board extends React.Component {
         this.setState({ elemens: mov })
         imgs = this.state.imgPlay
       } else if (move === 0 && plays[index] === 1) {
-        imgs = this.state.imgPlay
+        imgs = this.state.imgPlay;
       }
       else if (move === 0 && plays[index] === 0) {
-        imgs = ""
-
+        imgs = "";
       }
 
       let newD = {
